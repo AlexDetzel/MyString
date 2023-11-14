@@ -6,12 +6,11 @@
 int main()
 {
 
-    String a("Hello, everybody, my name is Maximillian and would like to say my name again.");
+    String a("s dsa  dsad dsa");
 
-    String c = a + 's';
-
-
-    std::cout << a.strPointer;
+    a.findWordsForDict();
+    a.printDict();
+    std::cout << a.calculateCountOfWordsInString();
     
 }
 

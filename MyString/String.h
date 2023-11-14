@@ -14,14 +14,24 @@ public:
 	int findStr(const char searchStr[]);
 	int getLength();
 	void setLenght(int length);
+	void setValueString(const char str[]);
 
-	void findWordsForDict();
+	
+	void printDict();
+	
+
+	int calculateCountOfWordsInString();
 
 //private:
+	void findWordsForDict();
+	void addWordToDict(String word);
+	bool isWordInDict(String word);
 	int calculateLenghtCharArray(const char str[]);
 	int length;
 	char* strPointer = nullptr;
+
 	String* dictionary = nullptr;
-	int* coutOfWordsInDict = nullptr;
+	int sizeOfDictionary = 0;
+	int* arrayWithcoutUniWordsInDict = nullptr;
 };
 

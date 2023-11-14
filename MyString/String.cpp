@@ -9,7 +9,6 @@ String::String(const char str[])
 	{
 		strPointer[i] = str[i];
 	}
-	
 }
 
 String::String()
@@ -126,8 +125,122 @@ void String::setLenght(int length)
 	this->strPointer = new char[this->length + 1];
 }
 
+void String::setValueString(const char str[])
+{   
+	this->length = calculateLenghtCharArray(str);
+	delete[] this->strPointer;
+	this->strPointer = new char[this->length + 1];
+	for (int i = 0; i < this->length + 1; i++)
+	{
+		strPointer[i] = str[i];
+	}
+}
+
 void String::findWordsForDict()
 {
+	String word("");
+	for (int i = 0; i < this->length + 1; i++)
+	{
+		if (this->strPointer[i] == '-' || strPointer[i] >= 'a' && strPointer[i] <= 'z' || strPointer[i] >= 'A' && strPointer[i] <= 'Z')
+		{
+			word = word + strPointer[i];
+			
+		}
+		else
+		{
+			if (!(this->isWordInDict(word)) && word.strPointer[0] != '\0' && word.strPointer[0] != '-')
+			{
+				this->addWordToDict(word);
+			}
+			word.setValueString("");
+		}
+		
+	}
+
+	this->arrayWithcoutUniWordsInDict = new int[this->sizeOfDictionary];
+	for (int i = 0; i < this->sizeOfDictionary; i++)
+	{
+		arrayWithcoutUniWordsInDict[i] = 0;
+	}
+
+	for (int j = 0; j < sizeOfDictionary; j++)
+	{
+		for (int i = 0; i < this->length + 1; i++)
+		{
+			if (this->strPointer[i] == '-' || strPointer[i] >= 'a' && strPointer[i] <= 'z' || strPointer[i] >= 'A' && strPointer[i] <= 'Z')
+			{
+				word = word + strPointer[i];
+			}
+			else
+			{
+				if (this->dictionary[j] == word.strPointer)
+					this->arrayWithcoutUniWordsInDict[j] += 1;
+				word.setValueString("");
+			}
+
+		}
+
+	}
+
+}
+
+void String::printDict()
+{
+	for (int i = 0; i < this->sizeOfDictionary; i++)
+	{
+		std::cout << dictionary[i].strPointer << "  Count: " << arrayWithcoutUniWordsInDict[i] << '\n';
+	}
+}
+
+
+
+int String::calculateCountOfWordsInString()
+{
+	int count = 0;
+	bool wasWord = false;
+	bool isWordNow;
+	for (int i = 0; i < this->length + 1; i++)
+	{
+		isWordNow = (this->strPointer[i] == '-' || strPointer[i] >= 'a' && strPointer[i] <= 'z' || strPointer[i] >= 'A' && strPointer[i] <= 'Z');
+
+
+		if (wasWord && !isWordNow)
+		{
+			count += 1;
+		}
+
+		if (isWordNow)
+		{
+			wasWord = true;
+		}
+		else wasWord = false;
+
+	}
+	return count;
+}
+
+void String::addWordToDict(String word)
+{
+	int sizeOfNewDictionary = this->sizeOfDictionary + 1;
+	String* dictionaryWithNewWord = new String[sizeOfNewDictionary];
+	for (int i = 0; i < sizeOfDictionary; i++)
+	{
+		dictionaryWithNewWord[i] = this->dictionary[i];
+	}
+	dictionaryWithNewWord[sizeOfNewDictionary - 1] = word;
+	delete[] this->dictionary;
+	sizeOfDictionary = sizeOfNewDictionary;
+	this->dictionary = dictionaryWithNewWord;
+}
+
+bool String::isWordInDict(String word)
+{
+	for (int i = 0; i < sizeOfDictionary; i++)
+	{
+		if (this->dictionary[i] == word)
+			return true;
+	}
+	return false;
 }
 
 int String::calculateLenghtCharArray(const char str[])
