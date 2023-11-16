@@ -11,6 +11,49 @@ String::String(const char str[])
 	}
 }
 
+String::String(const char pathToTxtFile[], bool fillFromPath)
+{
+	this->length = 0;
+	std::ifstream fin;
+	fin.open(pathToTxtFile);
+	if (!fin.is_open())
+	{
+		std::cout << "Error IN";
+	}
+	else
+	{
+		//std::cout << "file opened";
+		char ch;
+		while (fin.get(ch))
+		{
+			this->length += 1;
+		}
+		fin.close();
+	}
+
+	this->strPointer = new char[this->length + 1];
+
+	fin.open(pathToTxtFile);
+	if (!fin.is_open())
+	{
+		std::cout << "Error IN";
+	}
+	else
+	{
+		//std::cout << "file opened";
+		char ch;
+		int counter = 0;
+		while (fin.get(ch))
+		{
+			this->strPointer[counter] = ch;
+			counter += 1;
+		}
+		this->strPointer[this->length] = '\0';
+		fin.close();
+	}
+
+}
+
 String::String()
 {
 
@@ -92,6 +135,25 @@ String String::operator+(const char other)
 	newString.strPointer[this->length + 1] = '\0';
 	newString.strPointer[this->length] = other;
 	return newString;  //Вышла за поле видимости но почему не уничтожилась деструктором?
+}
+
+void String::safeInTxtFile(String txtFileName)
+{
+	std::ofstream fout;
+	fout.open(txtFileName.getValueString());
+	if (!fout.is_open())
+	{
+		std::cout << "error in fout";
+	}
+	else
+	{
+		//std::cout << "all good in fout";
+		for (int i = 0; i < this->length; i++)
+		{
+			fout << this->getValueString()[i];
+		}
+		fout.close();
+	}
 }
 
 String String::operator+(String other)
@@ -201,62 +263,10 @@ void String::setValueString(const char str[])
 	}
 }
 
-void String::findWordsForDict()
+char* String::getValueString()
 {
-	String word("");
-	for (int i = 0; i < this->length + 1; i++)
-	{
-		if (this->strPointer[i] == '-' || strPointer[i] >= 'a' && strPointer[i] <= 'z' || strPointer[i] >= 'A' && strPointer[i] <= 'Z')
-		{
-			word = word + strPointer[i];
-			
-		}
-		else
-		{
-			if (!(this->isWordInDict(word)) && word.strPointer[0] != '\0' && word.strPointer[0] != '-')
-			{
-				this->addWordToDict(word);
-			}
-			word.setValueString("");
-		}
-		
-	}
-
-	this->arrayWithcoutUniWordsInDict = new int[this->sizeOfDictionary];
-	for (int i = 0; i < this->sizeOfDictionary; i++)
-	{
-		arrayWithcoutUniWordsInDict[i] = 0;
-	}
-
-	for (int j = 0; j < sizeOfDictionary; j++)
-	{
-		for (int i = 0; i < this->length + 1; i++)
-		{
-			if (this->strPointer[i] == '-' || strPointer[i] >= 'a' && strPointer[i] <= 'z' || strPointer[i] >= 'A' && strPointer[i] <= 'Z')
-			{
-				word = word + strPointer[i];
-			}
-			else
-			{
-				if (this->dictionary[j] == word.strPointer)
-					this->arrayWithcoutUniWordsInDict[j] += 1;
-				word.setValueString("");
-			}
-
-		}
-
-	}
-
+	return this->strPointer;
 }
-
-void String::printDict()
-{
-	for (int i = 0; i < this->sizeOfDictionary; i++)
-	{
-		std::cout << dictionary[i].strPointer << "  Count: " << arrayWithcoutUniWordsInDict[i] << '\n';
-	}
-}
-
 
 
 int String::calculateCountOfWordsInString()
@@ -282,30 +292,6 @@ int String::calculateCountOfWordsInString()
 
 	}
 	return count;
-}
-
-void String::addWordToDict(String word)
-{
-	int sizeOfNewDictionary = this->sizeOfDictionary + 1;
-	String* dictionaryWithNewWord = new String[sizeOfNewDictionary];
-	for (int i = 0; i < sizeOfDictionary; i++)
-	{
-		dictionaryWithNewWord[i] = this->dictionary[i];
-	}
-	dictionaryWithNewWord[sizeOfNewDictionary - 1] = word;
-	delete[] this->dictionary;
-	sizeOfDictionary = sizeOfNewDictionary;
-	this->dictionary = dictionaryWithNewWord;
-}
-
-bool String::isWordInDict(String word)
-{
-	for (int i = 0; i < sizeOfDictionary; i++)
-	{
-		if (this->dictionary[i] == word)
-			return true;
-	}
-	return false;
 }
 
 int String::calculateLenghtCharArray(const char str[])

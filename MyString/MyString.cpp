@@ -8,11 +8,21 @@
 int main()
 {
     String a("asdf Ddf csdcsdfs Ddf bfsdfds dasdasdas Ddf c Ddf");
+    String b("sdas asdads fdfs ");
+    String c = a + b;
     Dictionary myDictionary;
-    myDictionary.fillDict(a);
+    myDictionary.fillDict(c);
     myDictionary.sordDictByAlphabet();
     myDictionary.sordDictByFrequency();
     myDictionary.printDict();
+    myDictionary.safeDictInCsv(String("myDictionary.txt"));
+    std::cout << c.getValueString();
+
+    String d("MyString.txt", 1);
+    std::cout << d.getValueString();
+
+    a.safeInTxtFile(String("abc"));
+
 
 }
 

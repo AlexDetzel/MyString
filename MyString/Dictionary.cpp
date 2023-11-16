@@ -6,20 +6,20 @@ void Dictionary::fillDict(String string)
 {
 	String word("");
 	this->vectorOfCouple.clear();
-	for (int i = 0; i < string.length + 1; i++)
+	for (int i = 0; i < string.getLength() + 1; i++)
 	{
-		if (string.strPointer[i] == '-' || string.strPointer[i] >= 'a' && string.strPointer[i] <= 'z' || string.strPointer[i] >= 'A' && string.strPointer[i] <= 'Z')
+		if (string.getValueString()[i] == '-' || string.getValueString()[i] >= 'a' && string.getValueString()[i] <= 'z' || string.getValueString()[i] >= 'A' && string.getValueString()[i] <= 'Z')
 		{
-			if (word.length == 0)
+			if (word.getLength() == 0)
 			{
-				word = word + std::toupper(string.strPointer[i]);
+				word = word + std::toupper(string.getValueString()[i]);
 			}
 			else 
-				word = word + string.strPointer[i];
+				word = word + string.getValueString()[i];
 		}
 		else
 		{
-			if (word.strPointer[0] != '\0' && word.strPointer[0] != '-')
+			if (word.getValueString()[0] != '\0' && word.getValueString()[0] != '-')
 			{
 				if (!(this->isWordInDict(word)))
 				{
@@ -62,10 +62,10 @@ int Dictionary::findWordInDict(String str)
 
 void Dictionary::printDict()
 {
-	std::cout << "List of Words in dictionary\n\n";
+	std::cout << "List of Words in dictionary:\n";
 	for (int i = 0; i < this->vectorOfCouple.size(); i++)
 	{
-		std::cout << vectorOfCouple[i].first.strPointer << " - " << vectorOfCouple[i].second << '\n';
+		std::cout << vectorOfCouple[i].first.getValueString() << " - " << vectorOfCouple[i].second << '\n';
 	}
 }
 
@@ -75,7 +75,7 @@ void Dictionary::sordDictByAlphabet()
 	{
 		for (int j = i; j < this->vectorOfCouple.size(); j++)
 		{
-			if (this->vectorOfCouple[i].first.strPointer[0] > this->vectorOfCouple[j].first.strPointer[0])
+			if (this->vectorOfCouple[i].first.getValueString()[0] > this->vectorOfCouple[j].first.getValueString()[0])
 				swap(vectorOfCouple[i], vectorOfCouple[j]);
 		}
 		
@@ -92,5 +92,24 @@ void Dictionary::sordDictByFrequency()
 				swap(vectorOfCouple[i], vectorOfCouple[j]);
 		}
 
+	}
+}
+
+void Dictionary::safeDictInCsv(String txtFileName)
+{
+	std::ofstream fout;
+	fout.open(txtFileName.getValueString());
+	if (!fout.is_open())
+	{
+		std::cout << "error in fout";
+	}
+	else
+	{
+		//std::cout << "all good in fout";
+		for (int i = 0; i < this->vectorOfCouple.size(); i++)
+		{
+			fout << this->vectorOfCouple[i].first.getValueString() << ',' << vectorOfCouple[i].second << '\n';
+		}
+		fout.close();
 	}
 }
