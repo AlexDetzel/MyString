@@ -3,15 +3,17 @@
 
 #include <iostream>
 #include "String.h"
+#include "Dictionary.h"
+
 int main()
 {
+    String a("asdf Ddf csdcsdfs Ddf bfsdfds dasdasdas Ddf c Ddf");
+    Dictionary myDictionary;
+    myDictionary.fillDict(a);
+    myDictionary.sordDictByAlphabet();
+    myDictionary.sordDictByFrequency();
+    myDictionary.printDict();
 
-    String a("s dsa  dsad dsa");
-
-    a.findWordsForDict();
-    a.printDict();
-    std::cout << a.calculateCountOfWordsInString();
-    
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

@@ -8,10 +8,13 @@ public:
 	String(const String& other);
 	~String();
 	String& operator=(const String other);
+	String& operator=(const char str[]);
 	bool operator== (String other);
 	String operator+(const char other);
+	String operator+(String other);
 
 	int findStr(const char searchStr[]);
+	int findStr(const String searchStr);
 	int getLength();
 	void setLenght(int length);
 	void setValueString(const char str[]);

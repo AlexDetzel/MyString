@@ -54,6 +54,21 @@ String& String::operator=(const String other)
 	return *this;
 }
 
+String& String::operator=(const char str[])
+{
+	if (this->strPointer != nullptr)
+	{
+		delete[] this->strPointer;
+	}
+	this->length = calculateLenghtCharArray(str);
+	this->strPointer = new char[this->length + 1];
+	for (int i = 0; i < this->length + 1; i++)
+	{
+		strPointer[i] = str[i];
+	}
+	return *this;
+}
+
 bool String::operator==(String other)
 {
 	if (this->length != other.length)
@@ -79,6 +94,22 @@ String String::operator+(const char other)
 	return newString;  //Вышла за поле видимости но почему не уничтожилась деструктором?
 }
 
+String String::operator+(String other)
+{
+	String newString;
+	newString.setLenght(this->length + other.length);
+	newString.strPointer = new char[newString.length + 1];
+	for (int i = 0; i < this->length; i++)
+	{
+		newString.strPointer[i] = this->strPointer[i];
+	}
+	for (int i = this->length; i < this->length + other.length + 1; i++)
+	{
+		newString.strPointer[i] = other.strPointer[i - this->length];
+	}
+	return newString;
+}
+
 int String::findStr(const char searchStr[])
 {
 	int countLetterSame = 0;
@@ -92,6 +123,40 @@ int String::findStr(const char searchStr[])
 		if (indexMyString == this->length - 1)
 			return -1;
 		if (this->strPointer[indexMyString] == searchStr[indexSearch])
+		{
+			countLetterSame += 1;
+			indexMyString += 1;
+			indexSearch += 1;
+		}
+		else
+		{
+			if (indexSearch != 0) {
+				indexSearch = 0;
+				countLetterSame = 0;
+			}
+			else
+			{
+				indexMyString += 1;
+				countLetterSame = 0;
+			}
+		}
+	}
+	return 1;
+}
+
+int String::findStr(const String searchStr)
+{
+	int countLetterSame = 0;
+	int indexMyString = 0;
+	int indexSearch = 0;
+
+	while (true)
+	{
+		if (countLetterSame == calculateLenghtCharArray(searchStr.strPointer))
+			return indexMyString - countLetterSame;
+		if (indexMyString == this->length - 1)
+			return -1;
+		if (this->strPointer[indexMyString] == searchStr.strPointer[indexSearch])
 		{
 			countLetterSame += 1;
 			indexMyString += 1;
